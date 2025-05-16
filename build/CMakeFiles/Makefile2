@@ -131,6 +131,7 @@ app/preinstall:
 
 # Recursive "clean" directory target.
 app/clean: app/CMakeFiles/lzip_app.dir/clean
+	$(CMAKE_COMMAND) -P app/CMakeFiles/cmake_directory_clean.cmake
 .PHONY : app/clean
 
 #=============================================================================

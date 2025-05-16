@@ -1,8 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/lzip_app.dir/lzip_app.cpp.o"
   "CMakeFiles/lzip_app.dir/lzip_app.cpp.o.d"
-  "lzip_app"
-  "lzip_app.pdb"
+  "lzip"
+  "lzip.pdb"
 )
 
 # Per-language clean rules from dependency scanning.
