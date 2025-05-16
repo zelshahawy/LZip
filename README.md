@@ -1,9 +1,33 @@
 # Welcome to lzip
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/zelshahawy/LZip/ci.yml?branch=main)](https://github.com/zelshahawy/LZip/actions/workflows/ci.yml)
-[![Documentation Status](https://readthedocs.org/projects/LZip/badge/)](https://LZip.readthedocs.io/)
-[![codecov](https://codecov.io/gh/zelshahawy/LZip/branch/main/graph/badge.svg)](https://codecov.io/gh/zelshahawy/LZip)
+
+
+# Description
+
+A minimalistic LZW (Lempel–Ziv–Welch) compression and decompression tool implemented in CPP and CMake as a header only project.
+Supports dictionary growth up to 15-bit codes (max code = 32767) and a “stop-growing dictionary” strategy once the dictionary is full.
+
+
+## Features
+
+- **Encoding (compression)**:
+  - Reads from a file or `stdin`.
+  - Produces an `.lzw` file or writes to `stdout` (depending on environment variables).
+  - Uses a variable code size, starting at 9 bits, up to a maximum of 15 bits.
+  - Stops adding new dictionary entries once `nextCode` hits 32767, but continues encoding with existing entries.
+
+- **Decoding (decompression)**:
+  - Can reads from any file, should be a `.lzw` file, or `stdin`.
+  - Produces a decompressed output file (`output.out`) or writes to `stdout` based on `CLI` Env variable.
+  - Mirrors the encoder’s logic (9-bit initial code size, grows to 15 bits).
+  - Ignores any leftover bits that cannot form a valid code (to avoid out-of-range dictionary references).
+
+- **Threading and Parallelism**:
+  - Supports encoding / decoding multiple files at times using threads up to a maximum of 8.
+  - For example, you can call `./encode <filename[1]> <filename[2]> ... <filename[8]>`.
+  - Has shown promising results when processing multiple, considerably big sized files.
+
 
 # Prerequisites
 
