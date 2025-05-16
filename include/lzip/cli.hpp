@@ -27,18 +27,12 @@ namespace lzw
 			std::exit(1);
 		}
 
-		std::vector<std::thread> threads;
-
 		auto dispatch = [&](std::istream &in, const std::string &name)
 		{
 			if (cmdName == "encode")
-			{
 				startEncoding(in, name);
-			}
 			else if (cmdName == "decode")
-			{
 				startDecoding(in, name);
-			}
 			else
 			{
 				std::cerr << "Invalid command name\n";
@@ -48,32 +42,42 @@ namespace lzw
 
 		if (argc < 2)
 		{
-			threads.emplace_back([&]()
-													 {
-            std::cout << "Enter text to " << cmdName << " (Ctrl+D to finish): ";
-            dispatch(std::cin, "stdin"); });
+			// no filenames: read from stdin
+			std::cout << "Enter text to " << cmdName << " (Ctrl+D to finish): ";
+			dispatch(std::cin, "stdin");
+		}
+		else if (argc == 2)
+		{
+			// exactly one file: process on the main thread
+			std::string filename = argv[1];
+			std::ifstream file(filename, std::ios::binary);
+			if (!file)
+			{
+				std::cerr << "Error opening file: " << filename << "\n";
+				std::exit(1);
+			}
+			dispatch(file, getStem(filename));
 		}
 		else
 		{
+			// multiple files: spawn one thread per file
+			std::vector<std::thread> threads;
 			for (int i = 1; i < argc; ++i)
 			{
 				threads.emplace_back([&, i]()
 														 {
-                std::string filename = argv[i];
-                std::ifstream file(filename, std::ios::binary);
-                if (!file) {
-                    std::cerr << "Error opening file: " << filename << "\n";
-                    return;
-                }
-                dispatch(file, getStem(filename)); });
+									std::string filename = argv[i];
+									std::ifstream file(filename, std::ios::binary);
+									if (!file)
+									{
+											std::cerr << "Error opening file: " << filename << "\n";
+											return;
+									}
+									dispatch(file, getStem(filename)); });
 			}
-		}
-
-		for (auto &t : threads)
-		{
-			if (t.joinable())
-				t.join();
+			for (auto &t : threads)
+				if (t.joinable())
+					t.join();
 		}
 	}
-
 } // namespace lzw

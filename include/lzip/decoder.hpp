@@ -60,7 +60,7 @@ namespace lzw
 			{
 				dict.push_back(DictionaryEntry{oldCode, out[0]});
 				++nextCode;
-				if (nextCode == (1 << codeSize) && codeSize < MAXBITS)
+				if (nextCode + 1 == (1 << codeSize) && codeSize < MAXBITS)
 					++codeSize;
 			}
 			oldCode = newCode;
