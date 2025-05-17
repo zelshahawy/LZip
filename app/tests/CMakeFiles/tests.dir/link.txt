@@ -1,0 +1,1 @@
+/usr/bin/c++ -O3 -march=native -DNDEBUG -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.4.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/tests.dir/tests.cpp.o CMakeFiles/tests.dir/lzip_t.cpp.o -o tests

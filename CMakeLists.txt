@@ -1,47 +1,54 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.10)
 
-# Set a name and a version number for your project:
+# Set project name and version
 project(lzip VERSION 0.0.1 LANGUAGES CXX)
 
-# Initialize some default paths
-include(GNUInstallDirs)
+# Default to Release for maximum optimization if not specified
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
+endif()
 
-# Define the minimum C++ standard that is required
+# Specify C++ standard
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Release flags for speed
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -DNDEBUG")
 
+# Optionally build documentation
+option(BUILD_DOCS "Enable building of documentation" OFF)
 
-# Compilation options
-option(BUILD_DOCS "Enable building of documentation" ON)
-
-# Add an interface target for our header-only library
+# Header-only interface library
 add_library(lzip INTERFACE)
 target_include_directories(lzip INTERFACE
-  $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/>
+  $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
+target_include_directories(lzip INTERFACE
+  $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
-# compile the application
+# Application
 add_subdirectory(app)
 
-# compile the tests
+# Testing
 include(CTest)
 if(BUILD_TESTING)
   add_subdirectory(ext/Catch2)
-  include(./ext/Catch2/contrib/Catch.cmake)
+  include(ext/Catch2/contrib/Catch.cmake)
   add_subdirectory(tests)
 endif()
 
+# Documentation
 if(BUILD_DOCS)
-  # Add the documentation
   add_subdirectory(doc)
 endif()
 
-# Add an alias target for use if this project is included as a subproject in another project
+# Alias for embedding
 add_library(lzip::lzip ALIAS lzip)
 
-# Install targets and configuration
+# Installation
 install(
   TARGETS lzip
   EXPORT lzip-config
@@ -61,6 +68,6 @@ install(
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
-# This prints a summary of found dependencies
+# Summary
 include(FeatureSummary)
 feature_summary(WHAT ALL)
