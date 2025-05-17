@@ -31,3 +31,11 @@
 *.out
 *.app
 .vscode
+
+/build/
+/app/CMakeFiles/
+/app/CMakeCache.txt
+/app/Makefile
+/app/cmake_install.cmake
+
+.DS_Store
