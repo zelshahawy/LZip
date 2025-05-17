@@ -10,11 +10,13 @@ add_custom_command(TARGET lzip_app POST_BUILD
             $<TARGET_FILE:lzip_app>
             ${CMAKE_CURRENT_BINARY_DIR}/decode
   )
+file(GLOB LZW_FILES "${CMAKE_CURRENT_BINARY_DIR}/*.lzw")
+file(GLOB OUT_FILES "${CMAKE_CURRENT_BINARY_DIR}/*.out")
 
 set_property(DIRECTORY APPEND PROPERTY
   ADDITIONAL_CLEAN_FILES
     "${CMAKE_CURRENT_BINARY_DIR}/encode"
     "${CMAKE_CURRENT_BINARY_DIR}/decode"
-    "${CMAKE_CURRENT_BINARY_DIR}/*.lzw"
-    "${CMAKE_CURRENT_BINARY_DIR}/*.out"
+    ${LZW_FILES}
+    ${OUT_FILES}
 )
