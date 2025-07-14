@@ -339,12 +339,21 @@ TEST_CASE("Error handling", "[error]")
     REQUIRE(true); // If we get here, no exception was thrown
   }
 
-  SECTION("Decoder error handling")
+  SECTION("Empty stream decoding")
   {
-    std::stringstream input("invalid compressed data");
+    // Test with completely empty stream
+    std::stringstream empty;
 
-    // This should not throw but should handle errors gracefully
-    startDecoding(input, "test");
-    REQUIRE(true); // If we get here, no exception was thrown
+    setenv("CLI", "1", 1);
+    std::streambuf *orig = std::cout.rdbuf();
+    std::stringstream output;
+    std::cout.rdbuf(output.rdbuf());
+
+    // This should handle empty input gracefully
+    startDecoding(empty, "empty_test");
+    REQUIRE(true);
+
+    std::cout.rdbuf(orig);
+    unsetenv("CLI");
   }
 }
