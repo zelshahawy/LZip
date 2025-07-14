@@ -2,8 +2,8 @@ This is an explanation of the file structure that the cookiecutter
 generated for you:
 
 * C++ source files:
-  * `include/lzip/lzip.hpp` is the main
-    C++ header that declares the interface of your library.
+  * `include/lzip/` contains the library headers including dictionary.hpp, bitio.hpp, encoder.hpp, decoder.hpp, and cli.hpp
+    that collectively implement the LZW compression algorithm interface.
   * `app/lzip_app.cpp` is an executable that uses the library.
     This can e.g. be used to provide a command line interface for your project.
   * `tests/lzip_t.cpp` contains the unit tests for the library.
